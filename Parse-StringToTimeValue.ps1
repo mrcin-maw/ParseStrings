@@ -1,4 +1,4 @@
-﻿function Parse-StringToTimeValue ([string] $value)
+function Parse-StringToTimeValue ([string] $value, [switch] $returnString=$false)
 {
     [string] $value_  = $value
     [System.Collections.ArrayList] $output_ = @()
@@ -42,5 +42,12 @@
             break
         }
     }
-    return [datetime] ($output_ -join ":")
+    if ($returnString)
+    {
+        return ($output_ -join ":")
+    }
+    else
+    {
+        return [datetime] ($output_ -join ":")
+    }
 }
