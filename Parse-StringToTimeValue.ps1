@@ -23,17 +23,17 @@ function Parse-StringToTimeValue ([string] $value, [switch] $returnString=$false
                        }
               default {
                 do {
-                        Write-host "`"$value_`" ($($value_.Length))"
+                        #Write-host "`"$value_`" ($($value_.Length))"
                         $subVal_ = $value_.Substring(0,2)
-                        Write-Host "$subVal_ [$($maxPosVal_[$output_.Count])] ($($output_.Count)) $([int]$subVal_ -lt $maxPosVal_[$output_.Count])"
+                        #Write-Host "$subVal_ [$($maxPosVal_[$output_.Count])] ($($output_.Count)) $([int]$subVal_ -lt $maxPosVal_[$output_.Count])"
                         if ([int]$subVal_ -lt $maxPosVal_[$output_.Count])
                         {
-                            $output_.Add($subVal_)
+                            $output_.Add($subVal_)|Out-Null
                             $value_ = $value_.Substring(2,$value_.Length-2)
                         }
                         else
                         {
-                            $output_.Add( "0"+$value_[0])
+                            $output_.Add( "0"+$value_[0])|Out-Null
                             $value_ = $value_.Substring(1,$value_.Length-1)
                         }
                     } while ($isTimeVal -and ($output_.Count -lt 3) -and $value_.Length)
