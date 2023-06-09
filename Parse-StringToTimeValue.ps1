@@ -1,3 +1,13 @@
+###
+#
+#    Author: MaWCin (MaW/MrCin)
+#    This code comes from repository https://github.com/MaWCin/ParseStrings
+#    You can use it, redistribute and/or modify it under the terms of the GNU
+#    General Public License as published by the Free Software Foundation,
+#    either version 3 of the License, or (at your option) any later version.
+# 
+###
+
 function Parse-StringToTimeValue ([string] $value, [switch] $returnString=$false)
 {
     [string] $value_  = $value
@@ -15,17 +25,18 @@ function Parse-StringToTimeValue ([string] $value, [switch] $returnString=$false
         #if there are only numbers...
         {($value -replace '\D+').Length -eq $_} 
             {
-                switch ($value_.length)
+            do {
+               switch ($value_.length)
                 {
                     1 {
-                        $outHH = "0"+$value_
-                        break
+                        Write-host "# length 1"
+                        $output_.Add("0"+$value_)|Out-Null
+                        $value_ = ""
                        }
               default {
-                do {
-                        #Write-host "`"$value_`" ($($value_.Length))"
+                        Write-host "# `"$value_`" ($($value_.Length))"
                         $subVal_ = $value_.Substring(0,2)
-                        #Write-Host "$subVal_ [$($maxPosVal_[$output_.Count])] ($($output_.Count)) $([int]$subVal_ -lt $maxPosVal_[$output_.Count])"
+                        Write-Host "$subVal_ [$($maxPosVal_[$output_.Count])] ($($output_.Count)) $([int]$subVal_ -lt $maxPosVal_[$output_.Count])"
                         if ([int]$subVal_ -lt $maxPosVal_[$output_.Count])
                         {
                             $output_.Add($subVal_)|Out-Null
@@ -36,11 +47,14 @@ function Parse-StringToTimeValue ([string] $value, [switch] $returnString=$false
                             $output_.Add( "0"+$value_[0])|Out-Null
                             $value_ = $value_.Substring(1,$value_.Length-1)
                         }
-                    } while ($isTimeVal -and ($output_.Count -lt 3) -and $value_.Length)
+                    }
                 }
-            }
-            break
+            } while ($isTimeVal -and ($output_.Count -lt 3) -and ($value_.Length))
         }
+    }
+    if ($output_.Count -lt 3)
+    {
+        $output_.Add("00")|Out-Null
     }
     if ($returnString)
     {
