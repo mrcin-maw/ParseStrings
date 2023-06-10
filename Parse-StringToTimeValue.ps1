@@ -10,11 +10,21 @@
 
 function Parse-StringToTimeValue ([string] $value, [switch] $returnString=$false)
 {
-    [string] $value_  = $value
+    [string] $value_  = ""
     [System.Collections.ArrayList] $output_ = @()
+
     [int[]] $maxPosVal_ = @(24,60,60)
     [string] $subVal_ = "00"
     [bool] $isTimeVal = $true
+
+    If ($value.Length -ge 8)
+    {
+        $value_ = $value.Substring(0,8)
+    }
+    else
+    {
+        $value_ = $value
+    }
      
     switch ($value.Length)
     {
@@ -29,14 +39,14 @@ function Parse-StringToTimeValue ([string] $value, [switch] $returnString=$false
                switch ($value_.length)
                 {
                     1 {
-                        Write-host "# length 1"
+                        #Write-host "# length 1"
                         $output_.Add("0"+$value_)|Out-Null
                         $value_ = ""
                        }
               default {
-                        Write-host "# `"$value_`" ($($value_.Length))"
+                        #Write-host "# `"$value_`" ($($value_.Length))"
                         $subVal_ = $value_.Substring(0,2)
-                        Write-Host "$subVal_ [$($maxPosVal_[$output_.Count])] ($($output_.Count)) $([int]$subVal_ -lt $maxPosVal_[$output_.Count])"
+                        #Write-Host "$subVal_ [$($maxPosVal_[$output_.Count])] ($($output_.Count)) $([int]$subVal_ -lt $maxPosVal_[$output_.Count])"
                         if ([int]$subVal_ -lt $maxPosVal_[$output_.Count])
                         {
                             $output_.Add($subVal_)|Out-Null
@@ -57,6 +67,7 @@ function Parse-StringToTimeValue ([string] $value, [switch] $returnString=$false
         #if there are digital substrings of length less than 3
         {([regex]::Matches($value_, '\d{3,}')).Count -eq 0}
             {
+                #Write-Host "[$value_]"
                 $output_ = [regex]::Matches($value_, '\d+') | %{ $_.Value }
 
                 for ([int] $i=0;$i -lt $output_.Count;$i++)
@@ -74,10 +85,11 @@ function Parse-StringToTimeValue ([string] $value, [switch] $returnString=$false
             $output_ = (,$subVal_*3)
         }
     }
-    Write-Host $output_
+    #Write-Host $output_
 
     if ($output_.Count -lt 3)
     {
+        #Write-Host $output_
         $output_.Add("00")|Out-Null
     }
     if ($returnString)
