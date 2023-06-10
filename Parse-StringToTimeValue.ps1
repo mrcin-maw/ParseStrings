@@ -50,8 +50,32 @@ function Parse-StringToTimeValue ([string] $value, [switch] $returnString=$false
                     }
                 }
             } while ($isTimeVal -and ($output_.Count -lt 3) -and ($value_.Length))
+        #
+        break
+        }
+
+        #if there are digital substrings of length less than 3
+        {([regex]::Matches($value_, '\d{3,}')).Count -eq 0}
+            {
+                $output_ = [regex]::Matches($value_, '\d+') | %{ $_.Value }
+
+                for ([int] $i=0;$i -lt $output_.Count;$i++)
+                {
+                    if($output_[$i].Length -eq 1) 
+                    {
+                        $output_[$i] = "0" +  $output_[$i]
+                    }
+                }
+            #
+        break
+        }
+
+        default {
+            $output_ = (,$subVal_*3)
         }
     }
+    Write-Host $output_
+
     if ($output_.Count -lt 3)
     {
         $output_.Add("00")|Out-Null
