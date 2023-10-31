@@ -10,10 +10,6 @@
 
 using namespace System.IO
 using namespace System.Collections
-using namespace System.Windows.Forms
-
-# Required assemblies
-Add-Type -AssemblyName System.Windows.Forms
 
 function Check-IfCSVData ([string[]] $data_)
 {
